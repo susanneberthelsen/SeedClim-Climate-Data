@@ -10,7 +10,7 @@ library("data.table")
 pn <- . %>% print(n = Inf)
 
 #### IMPORT CLIMATE DATA FOR ALL SITES ####
-source('Functions_ReadInSeedClimClimateData.R')
+source('Functions_ReadInSeedClimClimateData.R', encoding="utf-8")
 
 # DATA FROM OLD PLACE
 #PC code
