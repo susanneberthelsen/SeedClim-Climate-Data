@@ -3,7 +3,6 @@
 #################################
 
 ### LIBRARIES
-library("lubridate")
 library("tidyverse")
 library("data.table")
 
