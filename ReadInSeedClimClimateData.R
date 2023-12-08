@@ -1,6 +1,6 @@
-####################################
- # READ IN SEEDCLIM CLIMATE DATA #
-####################################
+#################################
+# READ IN SEEDCLIM CLIMATE DATA #
+#################################
 
 ### LIBRARIES
 library("lubridate")
