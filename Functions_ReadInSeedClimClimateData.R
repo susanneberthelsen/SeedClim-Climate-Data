@@ -53,7 +53,7 @@ textfile <- "Q:/Ecological and Environmental Change/SeedClimClimateData/Climate_
 ReadInBodyITAS <- function(textfile){
   # import body of data
   dat <- readLines(textfile) %>% 
-    gsub(pattern = "\xf8", replacement = "o", x = .) %>% # replace stupid multibyte character with o
+    gsub(pattern = "\xf8", replacement = "o", x = ., useBytes = TRUE) %>% # replace stupid multibyte character with o
     paste(collapse = "\n") %>% 
     read_delim(delim = "\t")
   
