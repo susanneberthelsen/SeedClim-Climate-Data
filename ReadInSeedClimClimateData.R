@@ -23,19 +23,23 @@ oldClimateRepo <- list.files(path = "Q:/Felles/007_Funcab_Seedclim/SeedClimClima
   ### files that need fixing!!!
   grep(pattern = "1239_23062009.txt", x = ., invert = TRUE, value = TRUE, ignore.case = TRUE) %>%
   #(function(.).[(1:50)]) %>% # only run subset
-  map_df(ReadData) %>% 
+  map(ReadData) %>% 
+  list_rbind() %>% 
   mutate(Repo = "old_Bio_Felles")
 
 # DATA FROM NEW PLACE
 #PC code
 newClimateRepo <- list.files(path = "Q:/Ecological and Environmental Change/SeedClimClimateData/Climate_data_loggers", 
-           pattern = "txt", recursive = TRUE, full.names = TRUE) %>%
+           pattern = "txt", recursive = TRUE, full.names = TRUE) %>% 
+  set_names() %>% 
   #Mac code
   #newClimateRepo <- list.files(path = "Q:/Ecological and Environmental Change/SeedClimClimateData/Climate_data_loggers", pattern = "txt", recursive = TRUE, full.names = TRUE) %>%
   grep(pattern = "Notes|Notater|UVB", x = ., invert = TRUE, value = TRUE, ignore.case = TRUE) %>%
   grep(pattern = "ITAS\\d{0,4}\\.txt|ITAS-FALL-2014\\.txt", x = ., invert = TRUE, value = TRUE, ignore.case = TRUE) %>%
-  #(function(.).[(1:50)]) %>% # only run subset
-  map_df(ReadData) %>% 
+#  (function(.).[(730:732)]) %>% # only run subset
+  map(ReadData) %>%
+  discard(is.null) %>% # discard empty data sets
+  list_rbind() %>%
   mutate(Repo = "new_Bio_EcologicalandEnvironmentalChange")
 
 # Warnings that are ok
