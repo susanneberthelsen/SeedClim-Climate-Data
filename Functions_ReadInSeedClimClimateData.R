@@ -42,6 +42,9 @@ ReadData <- function(textfile){
     warning(paste(textfile, "format not recognised")) # warning if logger not recognized
     dat <- NULL
   }
+  if (is.null(dat)) { #no data in file
+    return(NULL)
+  }
   dat$file <- basename(textfile) # puts file in extra column
   return(dat)
 }
@@ -103,18 +106,24 @@ ReadInBodyUTL <- function(textfile){
   if(length(skip) != 1)stop(paste("no Sample", textfile)) # warming is there is no Sample
   
   # import data, without header
-  dat <- read_delim(textfile, delim = "\t", skip = skip, col_names = FALSE, locale = locale(decimal_mark = ","))
+  dat <- read_delim(textfile, delim = "\t", skip = skip, col_names = FALSE, locale = locale(decimal_mark = ","), show_col_types = FALSE)
   
   if(ncol(dat) == 1){
-    dat <- read.table(textfile, header=FALSE, sep=" ", skip=skip, dec=",", stringsAsFactors = FALSE)
-    dat <- data.frame(paste(dat[, 1], dat[, 2]), dat[, 3], stringsAsFactors = FALSE)
+    dat <- read.table(textfile, header=FALSE, sep=" ", skip=skip, dec=",")
+    dat <- data.frame(paste(dat[, 1], dat[, 2]), dat[, 3])
     names(dat) <- c("X1", "X2")
     dat <- dat %>% 
       as.tibble()
     #dat <- data_frame(X1 = paste(dat[[1]], dat[[2]]), X2 = dat[[3]])
   }
   if(ncol(dat) == 3){
-    dat <- data_frame(X1 = paste(dat[[1]], dat[[2]], sep=" "), X2 = dat[[3]])
+    dat <- tibble(X1 = paste(dat[[1]], dat[[2]], sep=" "), X2 = dat[[3]])
+  }
+  
+  # return null if no data
+  if (nrow(dat) == 0) {
+    warning("No data in file ", textfile, " returning NULL")
+    return(NULL)
   }
   
   dat <- dat %>% 
@@ -156,7 +165,7 @@ ReadInBodyUTL <- function(textfile){
     dat <- dat %>% 
       mutate(site = SITE)
     
-    warning(paste("site imputed from path for", SITE, basename(textfile)))
+    message("site imputed from path for ", SITE, " ", basename(textfile))
   }
   
   
